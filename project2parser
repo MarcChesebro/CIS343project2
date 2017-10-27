@@ -4,9 +4,12 @@
 
 %}
 
-%start stmt_list
+%start program
 
-%union { int a; }
+%union { 
+	int ival; 
+	float fval;
+}
 
 %token END
 %token END_STATEMENT
@@ -15,20 +18,31 @@
 %token CIRCLE
 %token RECTANGLE
 %token SET_COLOR
-%token INT
-%token FLOAT
+%token <ival> INT
+%token <fval> FLOAT
 
 %% 
 
-stmt_list:	stmt END
-		|
-		stmt stmt_list END
+program:	stmt_list END END_STATEMENT
 		;
+
+stmt_list:	stmt
+		|
+		stmt stmt_list
+		;
+
 stmt:		command END_STATEMENT
 		;
+
 command:	LINE INT INT INT INT
+		{
+			printf("line command");
+		}
 		|
 		POINT INT INT
+		{
+			printf("point command");
+		}
 		|
 		CIRCLE INT INT INT
 		|
@@ -39,7 +53,7 @@ command:	LINE INT INT INT INT
 
 %%
 
-main()
+int main()
 {
 	return(yyparse());
 }
