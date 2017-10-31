@@ -78,7 +78,7 @@ command:	LINE INT INT INT INT
 		|
 		SET_COLOR INT INT INT
 		{
-			if($2 < 0 || $3 < 0 || $4 < 0 || $2 > 256 || $3 > 256 || $4 > 256){
+			if($2 < 0 || $3 < 0 || $4 < 0 || $2 > 255 || $3 > 255 || $4 > 255){
 				yyerror("Invalid RGB color value.");
 			}else{
 				set_color($2, $3, $4);
