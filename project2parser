@@ -1,6 +1,9 @@
 %{
 
-#include<stdio.h>
+#include <stdio.h>
+#include "zoomjoystrong.h"
+
+int yyerror(char* s);
 
 %}
 
@@ -24,6 +27,9 @@
 %% 
 
 program:	stmt_list END END_STATEMENT
+		{
+			finish();
+		}
 		;
 
 stmt_list:	stmt
@@ -35,36 +41,62 @@ stmt:		command END_STATEMENT
 		;
 
 command:	LINE INT INT INT INT
-		{
-			printf("line command");
+		{	
+			if($2 < 0 || $3 < 0 || $4 < 0 || $5 < 0 || $2 > WIDTH || $4 > WIDTH || $3 > HEIGHT || $5 > HEIGHT){
+				yyerror("HEIGHT or WIDTH is out of bounds.");
+			}else{
+				line($2, $3, $4, $5);
+			}
 		}
 		|
 		POINT INT INT
 		{
-			printf("point command");
+			if($2 < 0 || $3 < 0 || $2 > WIDTH || $3 > HEIGHT){
+				yyerror("HEIGHT or WIDTH is out of bounds.");
+			}else{
+				point($2, $3);
+			}
 		}
 		|
 		CIRCLE INT INT INT
+		{
+			if($2 < 0 || $3 < 0 || $2 > WIDTH || $3 > HEIGHT){
+				yyerror("HEIGHT or WIDTH is out of bounds.");
+			}else{
+				circle($2, $3, $4);
+			}
+		}
 		|
 		RECTANGLE INT INT INT INT
+		{
+			if($2 < 0 || $3 < 0 || $2 > WIDTH || $3 > HEIGHT){
+				yyerror("HEIGHT or WIDTH is out of bounds.");
+			}else{
+				rectangle($2, $3, $4, $5);
+			}
+		}
 		|
 		SET_COLOR INT INT INT
+		{
+			if($2 < 0 || $3 < 0 || $4 < 0 || $2 > 256 || $3 > 256 || $4 > 256){
+				yyerror("Invalid RGB color value.");
+			}else{
+				set_color($2, $3, $4);
+			}
+		}
 		;
 
 %%
 
-int main()
+int main(int argc, char* argv[])
 {
+	setup();
 	return(yyparse());
 }
 
-yyerror(s)
-char *s;
+int yyerror(char* s)
 {
-	fprintf(stderr, "%s\n",s);
+	fprintf(stderr, "%s\n", s);
+	return 0;
 }
 
-yywrap()
-{
-	return(1);
-}
