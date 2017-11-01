@@ -10,10 +10,12 @@
 %%
 
 [0-9]+     	{
+			//send value of int with token
 			yylval.ival = atoi(yytext);
 			return INT;
 		}
 [0-9]*\.[0-9]+	{
+			//send value of int with token
 			yylval.fval = atof(yytext);
 			return FLOAT;
 		}
