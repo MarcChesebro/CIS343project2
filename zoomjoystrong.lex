@@ -25,9 +25,8 @@ line     	{return LINE;}
 point     	{return POINT;}
 circle     	{return CIRCLE;}
 set_color     	{return SET_COLOR;}
-circle     	{return CIRCLE;}
 rectangle     	{return RECTANGLE;}
 [\t| |\n]	;
-.		{printf("invalid");}
+.		{printf("invalid token: %s\n", yytext);}
 
 %%
