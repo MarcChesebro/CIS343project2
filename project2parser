@@ -29,6 +29,7 @@ int yyerror(char* s);
 program:	stmt_list END END_STATEMENT
 		{
 			finish();
+			exit(0);
 		}
 		;
 
